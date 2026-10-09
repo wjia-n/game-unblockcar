@@ -166,6 +166,13 @@ class SettingsScreen extends StatelessWidget {
   void _rename(BuildContext context, GarageThemeDef t) {
     final ctrl = TextEditingController(text: settings.playerName);
     audio.click();
+    var saved = false;
+    void commit() {
+      if (saved) return;
+      saved = true;
+      settings.setPlayerName(ctrl.text);
+    }
+
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -178,6 +185,11 @@ class SettingsScreen extends StatelessWidget {
         content: TextField(
           controller: ctrl,
           maxLength: 16,
+          textInputAction: TextInputAction.done,
+          onSubmitted: (_) {
+            commit();
+            Navigator.pop(ctx);
+          },
           style: TextStyle(
               color: t.ink, fontWeight: FontWeight.w700, fontSize: 18),
           decoration: InputDecoration(
@@ -195,7 +207,7 @@ class SettingsScreen extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {
-              settings.setPlayerName(ctrl.text);
+              commit();
               Navigator.pop(ctx);
             },
             child: Text('SAVE',
@@ -204,7 +216,7 @@ class SettingsScreen extends StatelessWidget {
           ),
         ],
       ),
-    );
+    ).then((_) => commit());
   }
 
   void _confirmReset(BuildContext context, GarageThemeDef t) {

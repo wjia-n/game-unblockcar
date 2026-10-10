@@ -342,11 +342,11 @@ class _GameScreenState extends State<GameScreen>
     widget.audio.star();
 
     String? nextLabel;
-    VoidCallback? onNext;
+    void Function(BuildContext)? onNext;
     if (widget.mode == 'pack' || widget.mode == 'timed' || widget.mode == 'par') {
       if (widget.levelIndex + 1 < 40) {
         nextLabel = 'NEXT LEVEL';
-        onNext = () => Navigator.of(context).pushReplacement(
+        onNext = (ctx) => Navigator.of(ctx).pushReplacement(
               MaterialPageRoute(
                 builder: (_) => GameScreen(
                   audio: widget.audio,
@@ -359,7 +359,7 @@ class _GameScreenState extends State<GameScreen>
       }
     } else if (widget.mode == 'free') {
       nextLabel = 'NEW PUZZLE';
-      onNext = () => Navigator.of(context).pushReplacement(
+      onNext = (ctx) => Navigator.of(ctx).pushReplacement(
             MaterialPageRoute(
               builder: (_) => GameScreen.freePlay(
                   audio: widget.audio, settings: widget.settings),
@@ -380,7 +380,7 @@ class _GameScreenState extends State<GameScreen>
           hintUsed: _engine.hintUsed,
           nextLabel: nextLabel,
           onNext: onNext,
-          onReplay: () => Navigator.of(context).pushReplacement(
+          onReplay: (ctx) => Navigator.of(ctx).pushReplacement(
             MaterialPageRoute(
               builder: (_) => GameScreen(
                 audio: widget.audio,

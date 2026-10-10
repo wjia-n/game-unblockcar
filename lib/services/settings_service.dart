@@ -44,7 +44,7 @@ class GarageSettings extends ChangeNotifier {
   int wins = 0;
   int gamesPlayed = 0;
   int bestMoves = 0;
-  bool isPro = false;
+  bool isPro = true; // everything unlocked — no Pro version
 
   /// Custom theme colors (ARGB ints).
   Map<String, int> customColors = Map.of(_defaultCustomColors);
@@ -117,7 +117,7 @@ class GarageSettings extends ChangeNotifier {
     wins = p.getInt(_kWins) ?? 0;
     gamesPlayed = p.getInt(_kGames) ?? 0;
     bestMoves = p.getInt(_kBestMoves) ?? 0;
-    isPro = p.getBool(_kIsPro) ?? false;
+    isPro = true; // everything unlocked
     for (final k in _defaultCustomColors.keys) {
       customColors[k] = p.getInt('$_kCustomPrefix$k') ?? _defaultCustomColors[k]!;
     }

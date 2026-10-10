@@ -16,8 +16,8 @@ class VictoryScreen extends StatefulWidget {
   final int stars;
   final bool hintUsed;
   final String? nextLabel;
-  final VoidCallback? onNext;
-  final VoidCallback onReplay;
+  final void Function(BuildContext)? onNext;
+  final void Function(BuildContext) onReplay;
 
   const VictoryScreen({
     super.key,
@@ -140,7 +140,7 @@ class _VictoryScreenState extends State<VictoryScreen> {
                           theme: t,
                           onTap: () {
                             widget.audio.click();
-                            widget.onNext!();
+                            widget.onNext!(context);
                           },
                         ),
                       ),
@@ -155,7 +155,7 @@ class _VictoryScreenState extends State<VictoryScreen> {
                             fontSize: 17,
                             onTap: () {
                               widget.audio.click();
-                              widget.onReplay();
+                              widget.onReplay(context);
                             },
                           ),
                         ),

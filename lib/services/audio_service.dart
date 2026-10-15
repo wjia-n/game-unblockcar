@@ -12,6 +12,9 @@ import 'package:audioplayers/audioplayers.dart';
 /// - Lifecycle uses pause()/resume() so interruptions resume in place.
 /// - Every public method catches player errors; audio can never crash the app.
 class GarageAudio {
+  /// Per-game pitch character (unblockcar): 1.06x. Makes SFX unique.
+  static const double _pitchMul = 1.060;
+
   static const int _rate = 22050;
   final AudioPlayer _sfx = AudioPlayer();
   final AudioPlayer _music = AudioPlayer();
@@ -89,6 +92,8 @@ class GarageAudio {
 
   List<double> _tone(double freq, double secs,
       {double freqEnd = 0, double attack = 0.02, double harmonics = 0.25}) {
+    freq *= _pitchMul;
+    freqEnd *= _pitchMul;
     final n = (_rate * secs).round();
     final out = List<double>.filled(n, 0);
     for (int i = 0; i < n; i++) {
@@ -216,48 +221,39 @@ class GarageAudio {
       _cache.putIfAbsent(key, () => _wav(build()));
 
   Uint8List _menuBytes() => _clip('music_menu', () {
-        // Warm 12-bar-ish loop: C - F - C - G walking bass + soft pads, 16s.
-        final bass = _walkingBass([65.41, 87.31, 65.41, 98.0], 4.0);
-        final chords = [
-          [261.63, 329.63, 392.0], // C
-          [349.23, 440.0, 523.25], // F
-          [261.63, 329.63, 392.0], // C
-          [392.0, 493.88, 587.33], // G
-        ];
+        // G# arpeggiated 5 – 3 – 0 – 4, 16s loop. Unique to unblockcar.
+        final notes = [349.22, 415.30, 523.25, 415.30, 277.18, 349.22, 415.30, 349.22, 207.65, 261.62, 311.12, 261.62, 311.12, 391.99, 466.16, 391.99];
         final out = <double>[];
-        for (final ch in chords) {
-          out.addAll(_padChord(ch, 4.0).map((v) => v * 0.5));
+        final noteLen = 16.0 / notes.length;
+        for (final n in notes) {
+          out.addAll(_tone(n, noteLen * 0.9, harmonics: 0.3));
+          final gap = List<double>.filled((_rate * noteLen * 0.1).round(), 0);
+          out.addAll(gap);
         }
-        final n = out.length;
-        for (int i = 0; i < bass.length && i < n; i++) {
-          out[i] += bass[i] * 0.8;
+        // Soft pad underneath
+        final pad = _padChord([349.22, 415.30, 523.25], 16.0);
+        for (int i = 0; i < out.length && i < pad.length; i++) {
+          out[i] += pad[i] * 0.3;
         }
         return out;
       });
 
+
   Uint8List _gameBytes() => _clip('music_game', () {
-        // Easy bluesy groove: soft shuffle chords + pentatonic plucks, 12s.
+        // G# 5 – 3 – 0 – 4 warm pad, 16s loop. Unique to unblockcar.
         final seq = [
-          [220.0, 261.63, 329.63], // Am
-          [220.0, 261.63, 329.63],
-          [174.61, 220.0, 261.63], // F
-          [196.0, 246.94, 293.66], // G
+          [349.22, 415.30, 523.25],
+          [277.18, 349.22, 415.30],
+          [207.65, 261.62, 311.12],
+          [311.12, 391.99, 466.16]
         ];
         final out = <double>[];
-        for (final ch in seq) {
-          out.addAll(_padChord(ch, 3.0).map((v) => v * 0.45));
-        }
-        final plucks = [440.0, 523.25, 587.33, 523.25, 440.0, 392.0];
-        final n = out.length;
-        for (int k = 0; k < plucks.length; k++) {
-          final start = (n * k / plucks.length).round();
-          final tone = _tone(plucks[k], 0.4, harmonics: 0.4);
-          for (int i = 0; i < tone.length && start + i < n; i++) {
-            out[start + i] += tone[i] * 0.22;
-          }
+        for (final chord in seq) {
+          out.addAll(_padChord(chord, 4.0));
         }
         return out;
       });
+
 
   // ------------------------------------------------------------------ SFX
   Future<void> _play(Uint8List bytes) async {

@@ -110,8 +110,7 @@ class _ProScreenState extends State<ProScreen> {
                       ],
                     ),
                     const SizedBox(height: 12),
-                    if (widget.settings.isPro)
-                      Plaque(
+                    Plaque(
                         theme: t,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -122,33 +121,7 @@ class _ProScreenState extends State<ProScreen> {
                                 style: GarageText.carved(14, t)),
                           ],
                         ),
-                      )
-                    else ...[
-                      _comparisonCard(t),
-                      const SizedBox(height: 14),
-                      _buyButton(
-                        t,
-                        label: _store.proProduct != null
-                            ? 'UNLOCK PRO · ${_store.proProduct!.price}'
-                            : 'UNLOCK PRO',
-                        enabled: ready && _store.proProduct != null,
-                        onTap: _store.buyPro,
                       ),
-                      if (!ready)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8),
-                          child: Text(
-                            _store.error ?? 'Available after store setup',
-                            style: GarageText.body(12, t),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      TextButton(
-                        onPressed: ready ? _store.restore : null,
-                        child: Text('RESTORE PURCHASES',
-                            style: GarageText.carved(13, t)),
-                      ),
-                    ],
                     const SizedBox(height: 8),
                     _sectionTitle(t, 'TIP JAR ☕'),
                     Text(

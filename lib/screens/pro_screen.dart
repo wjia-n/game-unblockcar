@@ -62,17 +62,6 @@ class _ProScreenState extends State<ProScreen> {
     super.dispose();
   }
 
-  static const _comparison = [
-    ('All 40 levels + daily puzzle', true, true),
-    ('Par challenge & timed modes', true, true),
-    ('Hints', true, true),
-    ('4 garage colorways', true, true),
-    ('4 die-cast paint sets', true, true),
-    ('10 more garage colorways', false, true),
-    ('8 more paint sets', false, true),
-    ('Custom garage creator', false, true),
-    ('PRO badge on your driver plaque', false, true),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -181,96 +170,6 @@ class _ProScreenState extends State<ProScreen> {
       child: Plaque(
         theme: t,
         child: Text(text, style: GarageText.carved(14, t)),
-      ),
-    );
-  }
-
-  Widget _comparisonCard(GarageThemeDef t) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        gradient: LinearGradient(
-            colors: [t.woodMid, t.woodDark],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight),
-        border: Border.all(color: Colors.black.withValues(alpha: 0.4), width: 2),
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withValues(alpha: 0.4),
-              offset: const Offset(0, 4),
-              blurRadius: 8),
-        ],
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              const Expanded(child: SizedBox()),
-              SizedBox(
-                  width: 52,
-                  child: Text('FREE',
-                      style: GarageText.carved(12, t),
-                      textAlign: TextAlign.center)),
-              SizedBox(
-                  width: 52,
-                  child: Text('PRO',
-                      style: GarageText.carved(12, t)
-                          .copyWith(color: t.signRed),
-                      textAlign: TextAlign.center)),
-            ],
-          ),
-          const Divider(color: Colors.black26),
-          for (final (label, free, pro) in _comparison)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Row(
-                children: [
-                  Expanded(
-                      child: Text(label,
-                          style: GarageText.body(13, t))),
-                  SizedBox(
-                      width: 52,
-                      child: Text(free ? '✓' : '—',
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: free
-                                  ? const Color(0xFF6E8E5E)
-                                  : t.signCream.withValues(alpha: 0.4),
-                              fontWeight: FontWeight.w900),
-                          textAlign: TextAlign.center)),
-                  SizedBox(
-                      width: 52,
-                      child: Text(pro ? '✓' : '—',
-                          style: const TextStyle(
-                              fontSize: 16,
-                              color: Color(0xFFD9A441),
-                              fontWeight: FontWeight.w900),
-                          textAlign: TextAlign.center)),
-                ],
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buyButton(GarageThemeDef t,
-      {required String label,
-      required bool enabled,
-      required VoidCallback onTap}) {
-    return Opacity(
-      opacity: enabled ? 1.0 : 0.55,
-      child: WoodButton(
-        label: label,
-        theme: t,
-        fontSize: 18,
-        onTap: enabled
-            ? () {
-                widget.audio.click();
-                onTap();
-              }
-            : () => widget.audio.invalid(),
       ),
     );
   }

@@ -198,25 +198,6 @@ class GarageAudio {
     return out;
   }
 
-  /// Walking upright-bass-ish line under soft chords (1950s garage menu).
-  List<double> _walkingBass(List<double> roots, double secsPerBar) {
-    final out = <double>[];
-    const pattern = [0, 4, 5, 7]; // root, third-ish walk
-    for (final root in roots) {
-      for (final step in pattern) {
-        final f = root * pow(2, step / 12);
-        final n = (_rate * secsPerBar / 4).round();
-        for (int i = 0; i < n; i++) {
-          final t = i / _rate;
-          out.add(_env(i, n, attack: 0.01) *
-              (sin(2 * pi * f * t) + 0.4 * sin(4 * pi * f * t)) *
-              0.5);
-        }
-      }
-    }
-    return out;
-  }
-
   Uint8List _clip(String key, List<double> Function() build) =>
       _cache.putIfAbsent(key, () => _wav(build()));
 

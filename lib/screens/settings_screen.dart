@@ -3,6 +3,7 @@ import '../services/audio_service.dart';
 import '../services/settings_service.dart';
 import '../theme/garage_themes.dart';
 import '../theme/garage_widgets.dart';
+import '../transfer/transfer_ui.dart';
 
 /// Garage settings: wooden-knob toggles for music/SFX, tin slide for
 /// vibration, volume groove, driver name, reset progress.
@@ -39,6 +40,7 @@ class SettingsScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+              TransferSaveTile(gameSlug: 'unblockcar'),
                     Row(
                       children: [
                         WoodIconButton(

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../services/audio_service.dart';
 import '../services/settings_service.dart';
@@ -128,7 +129,7 @@ class _GarageScreenState extends State<GarageScreen> {
                       isTheme: false,
                     ),
                     const SizedBox(height: 14),
-                    _sectionTitle(t, 'CUSTOM GARAGE (PRO)'),
+                    _sectionTitle(t, defaultTargetPlatform == TargetPlatform.iOS ? 'CUSTOM GARAGE' : 'CUSTOM GARAGE (PRO)'),
                     _customPanel(t, s),
                     const SizedBox(height: 16),
                     WoodButton(

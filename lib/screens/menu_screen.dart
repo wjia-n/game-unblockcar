@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../services/audio_service.dart';
 import '../services/iap_service.dart';
@@ -148,7 +149,7 @@ class _MenuScreenState extends State<MenuScreen> {
                               ' ${widget.settings.totalStars}/120',
                               style: GarageText.carved(16, t),
                             ),
-                            if (widget.settings.isPro) ...[
+                            if (widget.settings.isPro && defaultTargetPlatform != TargetPlatform.iOS) ...[
                               const SizedBox(width: 8),
                               Container(
                                 padding: const EdgeInsets.symmetric(
@@ -254,10 +255,10 @@ class _MenuScreenState extends State<MenuScreen> {
                               settings: widget.settings)),
                         ),
                         _ModeButton(
-                          label: 'PRO',
-                          sub: widget.settings.isPro
+                          label: defaultTargetPlatform == TargetPlatform.iOS ? '⭐ Gold Star' : 'PRO',
+                          sub: defaultTargetPlatform == TargetPlatform.iOS ? '⭐ Gold Star' : (widget.settings.isPro
                               ? 'You are PRO!'
-                              : 'Unlock the works',
+                              : 'Unlock the works'),
                           icon: Icons.workspace_premium,
                           theme: t,
                           onTap: () => _go(ProScreen(

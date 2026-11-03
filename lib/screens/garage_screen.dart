@@ -349,7 +349,9 @@ class _GarageScreenState extends State<GarageScreen> {
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
-                  'Design your own garage colors with Unblock Car PRO.',
+                  defaultTargetPlatform == TargetPlatform.iOS
+                      ? 'Design your own garage colors.'
+                      : 'Design your own garage colors with Unblock Car PRO.',
                   style: GarageText.body(14, t),
                 ),
               ),
